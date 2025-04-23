@@ -362,3 +362,9 @@ footer {
     min-width: 200px;
   }
 }
+
+@media (max-width: 768px) {
+  .carousel {
+    justify-content: flex-start; /* Align items to the left for horizontal scrolling */
+  }
+}
