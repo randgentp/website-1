@@ -1,0 +1,354 @@
+:root {
+  --primary-gradient: linear-gradient(45deg, #ff0000, #ff6b6b);
+  --secondary-gradient: linear-gradient(45deg, #ffd9007a, #ffa500);
+  --text-color: #333333;
+  --bg-color: rgb(255, 255, 255);
+  --transition: all 0.3s ease;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+body.dark-mode {
+  --bg-color: #333333;
+  --text-color: #ffffff;
+  --primary-gradient: linear-gradient(45deg, #ff4444, #ff8080);
+  --secondary-gradient: linear-gradient(45deg, #ffe55c, #ffb347);
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background-color: var(--bg-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 90%;
+  top: 0;
+  z-index: 1000;
+  transition: var(--transition);
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.nav-links a:hover {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: var(--transition);
+}
+
+.theme-toggle:hover {
+  background: var(--secondary-gradient);
+  color: white;
+}
+
+.mobile-menu {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+/* Hero Section */
+.hero {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  margin-top: 70px;
+}
+
+.hero-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  padding: 0 1rem;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* Product Section */
+.product-section {
+  padding: 5rem 10%;
+  background-color: var(--bg-color);
+}
+
+.product-section h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+  background: var(--primary-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  margin: 2rem 0;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.carousel-item {
+  min-width: 300px;
+  padding: 1rem;
+  background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
+    var(--secondary-gradient) border-box;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+.carousel-item:hover {
+  transform: translateY(-5px);
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.product-btn {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.product-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Testimonials */
+.testimonials {
+  padding: 5rem 10%;
+  background: var(--secondary-gradient);
+}
+
+.testimonials h2 {
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
+    var(--primary-gradient) border-box;
+  border: 2px solid transparent;
+  padding: 2rem;
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Footer */
+footer {
+  background: var(--primary-gradient);
+  color: white;
+  padding: 3rem 10%;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.footer-section h3 {
+  color: var(--bg-color);
+  margin-bottom: 1rem;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+  color: white;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-section ul li a:hover {
+  color: var(--secondary-gradient);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-color);
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links a {
+    width: 100%;
+  }
+
+  .theme-toggle {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .nav-links.active {
+    display: flex;
+    opacity: 0.86;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .carousel {
+    padding: 0.5rem;
+  }
+
+  .carousel-item {
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .carousel-item {
+    min-width: 200px;
+  }
+}
