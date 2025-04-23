@@ -185,14 +185,21 @@ body.dark-mode {
 
 .carousel {
   display: flex;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
   margin: 2rem 0;
   gap: 2rem;
   padding: 1rem;
+  justify-content: center;
 }
 
 .carousel-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+
+  box-sizing: border-box;
+
   min-width: 300px;
   padding: 1rem;
   background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box,
@@ -200,6 +207,9 @@ body.dark-mode {
   border: 2px solid transparent;
   border-radius: 10px;
   transition: var(--transition);
+}
+.carousel::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for better UX */
 }
 
 .carousel-item:hover {
