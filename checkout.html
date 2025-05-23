@@ -51,9 +51,12 @@
               required
             />
             <input
-              type="tel"
+              type="number"
+              pattern="/^-?\d+\.?\d*$/"
+              onKeyPress="if(this.value.length==10) return false;"
               id="customer-phone"
               placeholder="Phone Number"
+              maxlength="10"
               required
             />
           </div>
@@ -66,7 +69,9 @@
           </div>
           <div class="form-row">
             <input
-              type="text"
+              type="number"
+              pattern="/^-?\d+\.?\d*$/"
+              onKeyPress="if(this.value.length==10) return false;"
               id="flat"
               placeholder="Flat/Building No."
               required
@@ -78,7 +83,14 @@
             <input type="text" id="city" placeholder="City" required />
           </div>
           <div class="form-row">
-            <input type="text" id="pincode" placeholder="Pin Code" required />
+            <input
+              id="pincode"
+              type="number"
+              pattern="/^-?\d+\.?\d*$/"
+              onKeyPress="if(this.value.length==6) return false;"
+              placeholder="Pin Code"
+              required
+            />
             <input
               type="text"
               id="landmark"
@@ -108,9 +120,11 @@
             <div class="form-group">
               <label for="card-number">Card Number</label>
               <input
-                type="text"
+                type="number"
+                pattern="/^-?\d+\.?\d*$/"
+                onKeyPress="if(this.value.length==16) return false;"
                 id="card-number"
-                maxlength="19"
+                maxlength="16"
                 placeholder="1234 5678 9012 3456"
                 required
               />
@@ -118,9 +132,11 @@
             <div class="form-group">
               <label for="expiry">Expiry Date</label>
               <input
-                type="text"
+                type="number"
+                pattern="/^-?\d+\.?\d*$/"
+                onKeyPress="if(this.value.length==4) return false;"
                 id="expiry"
-                maxlength="5"
+                maxlength="4"
                 placeholder="MM/YY"
                 required
               />
@@ -130,7 +146,7 @@
               <input
                 type="password"
                 id="cvv"
-                maxlength="4"
+                maxlength="3"
                 placeholder="123"
                 required
               />

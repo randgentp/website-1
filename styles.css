@@ -646,9 +646,10 @@ body.dark-mode {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgb(0, 0, 0);
   justify-content: center;
   align-items: center;
+  opacity: 0.8;
 }
 .modal.show {
   display: flex;
