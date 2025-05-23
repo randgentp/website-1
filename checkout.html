@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Krrshnut</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body data-theme="light">
+    <nav class="navbar">
+      <img
+        id="logo"
+        src="/resources/rndlogo2.png"
+        alt="Krrshnut Logo"
+        class="logo"
+      />
+      <div class="mobile-menu">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="#contact">Contact</a>
+        <button class="theme-toggle">
+          <i class="fas fa-moon"></i>
+          <span>Toggle Theme</span>
+        </button>
+      </div>
+    </nav>
+
+    <section class="checkout-main">
+      <div class="checkout-summary">
+        <h2>Checkout Summary</h2>
+        <div class="checkout-items"></div>
+        <div class="checkout-total">
+          <h3>Total: ₹<span id="checkout-total">0.00</span></h3>
+        </div>
+      </div>
+      <div class="address-section" id="address-section">
+        <h2>Shipping Address</h2>
+        <form id="address-form" class="address-form" autocomplete="off">
+          <div class="form-row">
+            <input
+              type="text"
+              id="customer-name"
+              placeholder="Full Name"
+              required
+            />
+            <input
+              type="tel"
+              id="customer-phone"
+              placeholder="Phone Number"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <input
+              type="email"
+              id="customer-email"
+              placeholder="Email (optional)"
+            />
+          </div>
+          <div class="form-row">
+            <input
+              type="text"
+              id="flat"
+              placeholder="Flat/Building No."
+              required
+            />
+            <input type="text" id="street" placeholder="Street Name" required />
+          </div>
+          <div class="form-row">
+            <input type="text" id="locality" placeholder="Locality" required />
+            <input type="text" id="city" placeholder="City" required />
+          </div>
+          <div class="form-row">
+            <input type="text" id="pincode" placeholder="Pin Code" required />
+            <input
+              type="text"
+              id="landmark"
+              placeholder="Landmark (optional)"
+            />
+          </div>
+          <button type="submit" class="checkout-btn">
+            Continue to Payment
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" id="close-modal">&times;</span>
+        <h2>Payment</h2>
+        <div class="payment-method-tabs">
+          <button type="button" class="tab-btn active" id="card-tab">
+            Card
+          </button>
+          <button type="button" class="tab-btn" id="upi-tab">UPI</button>
+        </div>
+        <form class="payment-form" id="payment-form">
+          <div id="card-fields">
+            <div class="form-group">
+              <label for="card-number">Card Number</label>
+              <input
+                type="text"
+                id="card-number"
+                maxlength="19"
+                placeholder="1234 5678 9012 3456"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="expiry">Expiry Date</label>
+              <input
+                type="text"
+                id="expiry"
+                maxlength="5"
+                placeholder="MM/YY"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="cvv">CVV</label>
+              <input
+                type="password"
+                id="cvv"
+                maxlength="4"
+                placeholder="123"
+                required
+              />
+            </div>
+          </div>
+          <div id="upi-fields" style="display: none">
+            <div class="form-group">
+              <label for="upi-id">UPI ID</label>
+              <input
+                type="text"
+                id="upi-id"
+                placeholder="yourname@bank"
+                pattern="^[\w.-]+@[\w.-]+$"
+              />
+            </div>
+          </div>
+          <button type="submit" class="checkout-btn">Pay Now</button>
+          <p style="font-size: 0.9em; color: gray; margin-top: 0.5em">
+            This is a demo payment form. No real transaction will occur.
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>About Krrshnut</h3>
+          <p>Premium quality makhana for health-conscious snackers.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <ul>
+            <li>Email: support@krrshnut.com</li>
+            <li>Phone: +91 1234567890</li>
+            <li>Address: Your Address Here</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Render checkout data as styled HTML
+      const data = JSON.parse(localStorage.getItem("checkoutData") || "[]");
+      const checkoutItems = document.querySelector(".checkout-items");
+      const checkoutTotal = document.getElementById("checkout-total");
+      let total = 0;
+
+      if (data.length === 0) {
+        checkoutItems.innerHTML = "<p>No items in cart.</p>";
+        checkoutTotal.textContent = "0.00";
+      } else {
+        data.forEach((item) => {
+          const subtotal = item.price * item.quantity;
+          total += subtotal;
+          const div = document.createElement("div");
+          div.className = "checkout-item";
+          div.innerHTML = `
+            <strong>${item.name}</strong><br>
+            Quantity: ${item.quantity}<br>
+            Price: ₹${item.price.toFixed(2)}<br>
+            Subtotal: ₹${subtotal.toFixed(2)}
+            <hr>
+          `;
+          checkoutItems.appendChild(div);
+        });
+        checkoutTotal.textContent = total.toFixed(2);
+      }
+
+      document
+        .getElementById("address-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Validation (as before)
+          const name = document.getElementById("customer-name").value.trim();
+          const phone = document.getElementById("customer-phone").value.trim();
+          const email = document.getElementById("customer-email").value.trim();
+          const pincode = document.getElementById("pincode").value.trim();
+
+          if (!/^[a-zA-Z\s]{2,}$/.test(name)) {
+            alert(
+              "Please enter a valid name (letters and spaces only, min 2 chars)."
+            );
+            return;
+          }
+          if (!/^\d{10}$/.test(phone)) {
+            alert("Please enter a valid 10-digit phone number.");
+            return;
+          }
+          if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+          }
+          if (!/^\d{6}$/.test(pincode)) {
+            alert("Please enter a valid 6-digit pin code.");
+            return;
+          }
+
+          // Show payment modal
+          document.getElementById("payment-modal").classList.add("show");
+        });
+
+      // Payment modal close
+      document.getElementById("close-modal").onclick = function () {
+        document.getElementById("payment-modal").classList.remove("show");
+      };
+      // Payment method tab switching
+      const cardTab = document.getElementById("card-tab");
+      const upiTab = document.getElementById("upi-tab");
+      const cardFields = document.getElementById("card-fields");
+      const upiFields = document.getElementById("upi-fields");
+
+      cardTab.onclick = function () {
+        cardTab.classList.add("active");
+        upiTab.classList.remove("active");
+        cardFields.style.display = "";
+        upiFields.style.display = "none";
+        // Make card fields required, upi not required
+        document.getElementById("card-number").required = true;
+        document.getElementById("expiry").required = true;
+        document.getElementById("cvv").required = true;
+        document.getElementById("upi-id").required = false;
+      };
+      upiTab.onclick = function () {
+        upiTab.classList.add("active");
+        cardTab.classList.remove("active");
+        cardFields.style.display = "none";
+        upiFields.style.display = "";
+        // Make upi required, card not required
+        document.getElementById("card-number").required = false;
+        document.getElementById("expiry").required = false;
+        document.getElementById("cvv").required = false;
+        document.getElementById("upi-id").required = true;
+      };
+
+      // Payment form submit
+      document
+        .getElementById("payment-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Gather user/address details
+          const userDetails = {
+            name: document.getElementById("customer-name").value.trim(),
+            phone: document.getElementById("customer-phone").value.trim(),
+            email: document.getElementById("customer-email").value.trim(),
+            flat: document.getElementById("flat").value.trim(),
+            street: document.getElementById("street").value.trim(),
+            locality: document.getElementById("locality").value.trim(),
+            city: document.getElementById("city").value.trim(),
+            pincode: document.getElementById("pincode").value.trim(),
+            landmark: document.getElementById("landmark").value.trim(),
+          };
+
+          // Gather item details
+          const itemDetails = JSON.parse(
+            localStorage.getItem("checkoutData") || "[]"
+          );
+
+          // Calculate total paid
+          const totalPaid = itemDetails.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          );
+
+          // Gather payment details
+          let paymentDetails = {};
+          if (upiTab.classList.contains("active")) {
+            const upiId = document.getElementById("upi-id").value.trim();
+            if (!/^[\w.-]+@[\w.-]+$/.test(upiId)) {
+              alert("Please enter a valid UPI ID.");
+              return;
+            }
+            paymentDetails = {
+              method: "UPI",
+              //upiId: upiId,
+              totalPaid: totalPaid,
+              status: "DONE",
+            };
+          } else {
+            paymentDetails = {
+              method: "Card",
+              //cardNumber: document.getElementById("card-number").value.trim(),
+              //expiry: document.getElementById("expiry").value.trim(),
+              //cvv: document.getElementById("cvv").value.trim(),
+              totalPaid: totalPaid,
+              status: "DONE",
+            };
+          }
+
+          // Compose payload
+          const payload = {
+            user: userDetails,
+            payment: paymentDetails,
+            items: itemDetails,
+          };
+
+          // Send to webhook
+          try {
+            await fetch(
+              "https://hook.us2.make.com/8ivtilb3275mtmkuhmg8nmbadact7sdz",
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              }
+            );
+            alert("Demo Payment Successful!");
+          } catch (err) {
+            alert("Payment succeeded, but failed to notify server.");
+          }
+
+          document.getElementById("payment-modal").classList.remove("show");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1000);
+        });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,6 +1,158 @@
+// Initialize cart array
+let cart = [];
+
 // Theme Toggle
 const themeToggle = document.querySelector(".theme-toggle");
 const body = document.body;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const themeToggle = document.querySelector(".theme-toggle");
+  const logo = document.getElementById("logo");
+  const body = document.body;
+
+  themeToggle.addEventListener("click", () => {
+    const isDarkMode = body.getAttribute("data-theme") === "dark";
+
+    if (isDarkMode) {
+      body.setAttribute("data-theme", "light");
+      logo.src = "/resources/rndlogo2.png"; // Light mode logo
+    } else {
+      body.setAttribute("data-theme", "dark");
+      logo.src = "/resources/rndlogo1.png"; // Dark mode logo
+    }
+  });
+  // Shopping cart initialization
+  const cartContainer = document.querySelector(".cart-container");
+  cartContainer.style.display = "none"; // Hide cart initially
+  initializeCart();
+});
+// Cart Functions
+function initializeCart() {
+  const buyButtons = document.querySelectorAll(".product-btn");
+  buyButtons.forEach((button) => {
+    button.addEventListener("click", addToCart);
+  });
+}
+function addToCart(event) {
+  const productCard = event.target.closest(".product-card");
+  const productName = productCard.querySelector("h3").textContent;
+  const priceText =
+    productCard.querySelector("p strong").parentElement.textContent;
+  const productPrice = parseFloat(priceText.match(/\d+\.\d+/)[0]);
+
+  const existingItem = cart.find((item) => item.name === productName);
+
+  if (existingItem) {
+    existingItem.quantity++;
+  } else {
+    cart.push({
+      name: productName,
+      price: productPrice,
+      quantity: 1,
+    });
+  }
+
+  updateCartDisplay();
+  showNotification(`Added ${productName} to cart`);
+}
+
+function updateCartDisplay() {
+  const cartItems = document.querySelector(".cart-items");
+  const cartContainer = document.querySelector(".cart-container");
+  cartItems.innerHTML = "";
+
+  if (cart.length === 0) {
+    cartContainer.style.display = "none";
+    // Remove checkout button if present
+    let oldBtn = cartContainer.querySelector(".checkout-btn");
+    if (oldBtn) oldBtn.remove();
+    return;
+  }
+
+  cartContainer.style.display = "block";
+
+  cart.forEach((item) => {
+    const itemElement = document.createElement("div");
+    itemElement.className = "cart-item";
+    itemElement.innerHTML = `
+      <span>${item.name}</span>
+      <div class="quantity-controls">
+        <button class="quantity-btn minus" data-product="${
+          item.name
+        }">-</button>
+        <span>${item.quantity}</span>
+        <button class="quantity-btn plus" data-product="${item.name}">+</button>
+        <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+      </div>
+    `;
+
+    const minusBtn = itemElement.querySelector(".minus");
+    const plusBtn = itemElement.querySelector(".plus");
+
+    minusBtn.addEventListener("click", () => updateQuantity(item.name, -1));
+    plusBtn.addEventListener("click", () => updateQuantity(item.name, 1));
+
+    cartItems.appendChild(itemElement);
+  });
+
+  updateTotal();
+
+  // Remove old checkout button if present
+  let oldBtn = cartContainer.querySelector(".checkout-btn");
+  if (oldBtn) oldBtn.remove();
+
+  // Add checkout button
+  let checkoutBtn = document.createElement("button");
+  checkoutBtn.className = "checkout-btn";
+  checkoutBtn.textContent = "Checkout";
+  checkoutBtn.addEventListener("click", handleCheckout);
+  cartContainer.appendChild(checkoutBtn);
+}
+
+function handleCheckout() {
+  if (cart.length === 0) {
+    alert("Cart is empty!");
+    return;
+  }
+  // Save cart as JSON and redirect
+  localStorage.setItem("checkoutData", JSON.stringify(cart));
+  window.location.href = "checkout.html"; // <-- Use relative path
+}
+
+function updateQuantity(productName, change) {
+  const item = cart.find((item) => item.name === productName);
+  if (item) {
+    item.quantity += change;
+    if (item.quantity <= 0) {
+      cart = cart.filter((i) => i.name !== productName);
+      showNotification(`Removed ${productName} from cart`);
+    }
+    updateCartDisplay();
+  }
+}
+
+function updateTotal() {
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  document.getElementById("cart-total").textContent = total.toFixed(2);
+}
+
+function showNotification(message) {
+  const notification = document.createElement("div");
+  notification.className = "notification";
+  notification.textContent = message;
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.classList.add("show");
+  }, 100);
+
+  setTimeout(() => {
+    notification.classList.remove("show");
+    setTimeout(() => {
+      notification.remove();
+    }, 300);
+  }, 2000);
+}
 
 themeToggle.addEventListener("click", () => {
   body.classList.toggle("dark-mode");
